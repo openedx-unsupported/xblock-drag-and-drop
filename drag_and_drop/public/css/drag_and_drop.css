@@ -1,0 +1,10 @@
+.codemirror-editor-wrapper {
+    border-style: solid;
+    border-width: 1px;
+}
+
+.xblock-editor-error-message {
+    display: none;
+    padding-left: 10px;
+    color: red;
+}
