@@ -1,6 +1,40 @@
 {% autoescape off %}
 <div class="drag-and-drop-xblock-wrapper">
     <h2>{{title}}</h2>
-    Student View TBD
+
+    <div class="drag-and-drop-description">
+        {{ description }}
+    </div>
+    <div class="drag-and-drop-wrapper">
+        <div class="drag-and-drop-items-pane">
+            <ul clas="draggable-item-list">
+                {% for item in items %}
+                <li class="draggable-item" data-id="{{item.id}}" data-correctbucket="{{item.correct_target}}">{{item.body}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="drag-and-drop-targets-pane">
+            {% for target in targets %}
+                <div class="draggable-target" data-id="{{target.id}}" data-row="{{target.row}}">
+                    <div class="draggable-target-top">
+                        <div class="draggable-target-title">
+                            {{target.title}}
+                        </div>
+                        <div class="draggable-target-description">
+                            {{target.description}}
+                        </div>
+                    </div>
+                    <div class="draggable-target-landing">
+                        <ul class="dropped-items"></ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="drag-and-drop-feedback">
+            <div class="drag-and-drop-feedback-close">X</div>
+            <div class="drag-and-drop-feedback-content">
+            </div>
+        </div>
+    </div>
 </div>
 {% endautoescape %}

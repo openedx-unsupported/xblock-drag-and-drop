@@ -1,10 +1,122 @@
-.codemirror-editor-wrapper {
-    border-style: solid;
-    border-width: 1px;
+.drag-and-drop-wrapper * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-clip: content-box;
+
+  /* don't allow user to select text here */
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select:none;
+  user-select:none;
 }
 
-.xblock-editor-error-message {
+.drag-and-drop-wrapper {
+    width: 750px;
+    margin: 0 auto;
+}
+.drag-and-drop-items-pane {
+    width: 30%;
+    float: left;
+    padding-right: 20px;
+}
+.draggable-item {
+    padding-bottom: 5px;
+    background-color: blue;
+    list-style-type: none;
+    z-index: 9999999;
+    /* note, this is a hack to get to work in Firefox otherwise the redraw looks really funky */
+    outline: 1px solid transparent;
+}
+
+.drag-and-drop-targets-pane {
+    width: 70%;
+    float: left;
+}
+
+.draggable-target {
+    width: 50%;
+    float: left;
+    background-color: orange;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.draggable-target-top {
+    width: 100%;
+}
+
+.draggable-target-title {
+    width: 30%;
+    float: left;
+    background-color: red;
+    padding-right: 5px;
+    min-height: 75px;
+}
+
+.draggable-target-description {
+    width: 70%;
+    float: left;
+    min-height: 75px;
+}
+
+.draggable-target-landing {
+    display: inline-block;
+    width: 100%;
+    min-height: 150px;
+    background-color: yellow;
+}
+
+.draggable-target-landing-hover {
+    background-color: pink;
+}
+
+.draggable-target-title p {
+    margin-top: 2px;
+    margin-left: 3px;
+}
+
+.draggable-target-description p {
+    margin-top: 2px;
+    margin-left: 3px;
+}
+
+
+.draggable-target-landing .dropped-items {
+    padding-left: 0;
+    margin-left: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 75%;
+}
+
+.dropped-correct-item {
+    padding-bottom: 5px;
+    background-color: cyan;
+    list-style-type: none;
+}
+
+
+.drag-and-drop-feedback {
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    min-height: 200px;
+    width: 400px;
+    background-color: rgba(0, 101, 189, 0.80);
     display: none;
-    padding-left: 10px;
-    color: red;
+}
+
+.drag-and-drop-feedback-content {
+    color: #FFFFFF;
+    margin-left: 10px;
+    margin-top: 15px;
+}
+
+.drag-and-drop-feedback-close {
+    float: right;
+    margin-right: 5px;
+    margin-top: 0px;
+    margin-left: 20px;
+    color: #FFFFFF;
 }

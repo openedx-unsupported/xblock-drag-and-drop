@@ -9,7 +9,7 @@ from lxml import etree
 from xml.etree import ElementTree as ET
 
 from xblock.core import XBlock
-from xblock.fields import Scope, String
+from xblock.fields import Scope, String, Integer
 from xblock.fragment import Fragment
 
 from StringIO import StringIO
@@ -35,10 +35,88 @@ class DragAndDropBlock(XBlock):
         default="Drag and Drop"
     )
 
-    data = String(help="XML contents to display for this module", scope=Scope.content, default=textwrap.dedent("""\
-        <drag_and_drop schema_version='1'>
-        </drag_and_drop>
-        """))
+    max_score = Integer(
+        display_name="Max Score",
+        help="This is the score that the user receives when he/she successfully completes the problem",
+        scope=Scope.settings,
+        default=1
+    )
+
+    student_state = String(
+        help="JSON payload regarding how the student has interacted with the problem",
+        scope=Scope.user_state
+    )
+
+    data = String(
+        display_name="Drag and Drop",
+        help="XML contents to display for this module",
+        scope=Scope.content,
+        default=textwrap.dedent("""
+            <drag_and_drop schema_version='1'>
+                <description>
+                    <p>This is an example Drag and Drop problem</p>
+                </description>
+                <correct_feedback>
+                    <p><strong>Terrific!</strong></p><p>You got everything correct!</p>
+                </correct_feedback>
+                <targets>
+                    <bucket id='task1' title='Task 1'>
+                        <description>
+                            <p>This is target 1. Choose me!</p>
+                        </description>
+                    </bucket>
+                    <bucket id='task2' title='Task 2'>
+                        <description>
+                            <p>This is target 2. Pick me!</p>
+                        </description>
+                    </bucket>
+                    <bucket id='task3' title='Task 3'>
+                        <description>
+                            <p>This is target 3. Here I am!</p>
+                        </description>
+                    </bucket>
+                    <bucket id='task4' title='Task 4'>
+                        <description>
+                            <p>This is target 4. Look here!</p>
+                        </description>
+                    </bucket>
+                </targets>
+                <items>
+                    <item id='item1' correct_target='task1'>
+                        <body>
+                            <p>Item 1</p>
+                        </body>
+                        <correct_feedback>
+                            <p>This was correct! Good job!</p>
+                        </correct_feedback>
+                        <incorrect_feedback>
+                            <p>Sorry, try again!</p>
+                        </incorrect_feedback>
+                    </item>
+                    <item id='item2' correct_target='task2'>
+                        <body>
+                            <p>Item 2</p>
+                        </body>
+                        <correct_feedback>
+                            <p>Yep, you got it</p>
+                        </correct_feedback>
+                        <incorrect_feedback>
+                            <p>Sorry, no dice!</p>
+                        </incorrect_feedback>
+                    </item>
+                    <item id='item3'>
+                        <body>
+                            <p>Decoy</p>
+                        </body>
+                        <incorrect_feedback>
+                            <p>This is just a decoy, silly person!</p>
+                        </incorrect_feedback>
+                    </item>
+                </items>
+
+            </drag_and_drop>
+        """
+        ))
 
     def student_view(self, context):
         """
@@ -47,13 +125,25 @@ class DragAndDropBlock(XBlock):
 
         xmltree = etree.fromstring(self.data)
 
+        # parse out all of the XML into nice friendly objects
+        description = self._get_description(xmltree)
+        correct_feedback = self._get_correct_feedback(xmltree)
+        items = self._get_items(xmltree)
+        targets = self._get_targets(xmltree)
+
         context = {
+            'title': self.display_name,
+            'description': description,
+            'items': items,
+            'targets': targets,
+            'correct_feedback': correct_feedback
         }
 
 
         fragment = Fragment()
         fragment.add_content(render_template('/templates/html/drag_and_drop.html', context))
         fragment.add_css(load_resource('public/css/drag_and_drop.css'))
+        fragment.add_javascript(load_resource('public/js/vendor/jquery-ui-1.10.4.custom.js'))
         fragment.add_javascript(load_resource('public/js/drag_and_drop.js'))
 
         fragment.initialize_js('DragAndDropBlock')
@@ -92,3 +182,124 @@ class DragAndDropBlock(XBlock):
         return {
             'result': 'success',
         }
+
+    @XBlock.json_handler
+    def student_on_item_drop(self, submissions, suffix=''):
+        item_state = submissions['item_state']
+        item_id = item_state['item_id']
+        bucket_id = item_state['bucket_id']
+
+        xmltree = etree.fromstring(self.data)
+        items = self._get_items(xmltree)
+
+        is_correct = False
+        msg = None
+        for item in items:
+            if item.id == item_id:
+                if item.correct_target == bucket_id:
+                    is_correct = True
+                    msg = item.correct_feedback
+                else:
+                    msg = item.incorrect_feedback
+
+        if is_correct:
+            return {
+                'result': 'success',
+                'msg': msg
+            }
+        else:
+            return {
+                'result': 'failure',
+                'msg': msg
+            }
+
+
+    ######### HELPER METHODS ############
+    def _inner_content(self, tag):
+        """
+        Helper method
+        """
+        inner_content = None
+        if tag is not None:
+            inner_content = u''.join(ET.tostring(e) for e in tag)
+
+        return inner_content
+
+    def _get_description(self, xmltree):
+        """
+        Parse the XML to get the description information
+        """
+        description = xmltree.find('description')
+        if description is not None:
+            return self._inner_content(description)
+        return None
+
+    def _get_correct_feedback(self, xmltree):
+        """
+        Parse the XML to get the feedback presented when the student
+        answers everything correctly
+        """
+        self._inner_content(xmltree.find('correct_feedback'))
+
+    def _get_targets(self, xmltree):
+        """
+        Parse the XML to get the target information
+        """
+
+        targets_element= xmltree.find('targets')
+        bucket_elements = targets_element.findall('bucket')
+        buckets = []
+        row = 1
+        index = 0
+        for bucket_element in bucket_elements:
+            target_id = bucket_element.get('id')
+            title = bucket_element.get('title')
+
+            description = self._inner_content(bucket_element.find('description'))
+
+            bucket = AttrDict()
+            bucket.id = target_id
+            bucket.title = title
+            bucket.description = description
+            bucket.row = row
+
+            buckets.append(bucket)
+            index += 1
+            if not index % 2:
+                row += 1
+
+        return buckets
+
+    def _get_items(self, xmltree):
+        """
+        Parse the XML to get the items information
+        """
+
+        items_element= xmltree.find('items')
+        item_elements = items_element.findall('item')
+        items = []
+        for item_element in item_elements:
+            item_id = item_element.get('id')
+            correct_target = item_element.get('correct_target')  # note, this can be None
+
+            body = self._inner_content(item_element.find('body'))
+
+            # note, for items that do not have a target, this is an optional element
+            correct_feedback_element = item_element.find('correct_feedback')
+            correct_feedback = None
+            if correct_feedback_element:
+                correct_feedback = self._inner_content(correct_feedback_element)
+
+            # but all items will expose an incorrect feedback
+            incorrect_feedback = self._inner_content(item_element.find('incorrect_feedback'))
+
+            item = AttrDict()
+            item.id = item_id
+            item.correct_target = correct_target
+            item.body = body
+            item.correct_feedback = correct_feedback
+            item.incorrect_feedback = incorrect_feedback
+
+            items.append(item)
+
+        return items

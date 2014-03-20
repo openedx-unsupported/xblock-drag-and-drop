@@ -7,9 +7,10 @@ function DragAndDropEditBlock(runtime, element) {
             'display_name': $(element).find('.edit-display-name').val(),
             'data': xmlEditor.getValue(),
         };
-        var handlerUrl = runtime.handlerUrl(element, 'studio_submit');
+
         $('.xblock-editor-error-message', element).html();
         $('.xblock-editor-error-message', element).css('display', 'none');
+        var handlerUrl = runtime.handlerUrl(element, 'studio_submit');
         $.post(handlerUrl, JSON.stringify(data)).done(function(response) {
             if (response.result === 'success') {
                 window.location.reload(false);
