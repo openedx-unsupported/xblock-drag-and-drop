@@ -5,11 +5,13 @@
 
 import logging
 import textwrap
+import json
+import webob
 from lxml import etree
 from xml.etree import ElementTree as ET
 
 from xblock.core import XBlock
-from xblock.fields import Scope, String, Integer
+from xblock.fields import Scope, String, Integer, Dict
 from xblock.fragment import Fragment
 
 from StringIO import StringIO
@@ -42,7 +44,7 @@ class DragAndDropBlock(XBlock):
         default=1
     )
 
-    student_state = String(
+    item_state = Dict(
         help="JSON payload regarding how the student has interacted with the problem",
         scope=Scope.user_state
     )
@@ -131,12 +133,15 @@ class DragAndDropBlock(XBlock):
         items = self._get_items(xmltree)
         targets = self._get_targets(xmltree)
 
+        draggable_target_class = 'draggable-target' if len(targets) > 1 else 'draggable-target-full-width'
+
         context = {
             'title': self.display_name,
             'description': description,
             'items': items,
             'targets': targets,
-            'correct_feedback': correct_feedback
+            'correct_feedback': correct_feedback,
+            'draggable_target_class': draggable_target_class
         }
 
 
@@ -183,34 +188,66 @@ class DragAndDropBlock(XBlock):
             'result': 'success',
         }
 
+    @XBlock.handler
+    def get_item_state(self, request, suffix=''):
+        return webob.response.Response(body=json.dumps(self.item_state))
+
+    @XBlock.handler
+    def clear_state(self, request, suffix=''):
+        self.item_state = {}
+        return webob.response.Response()
+
     @XBlock.json_handler
     def student_on_item_drop(self, submissions, suffix=''):
-        item_state = submissions['item_state']
-        item_id = item_state['item_id']
-        bucket_id = item_state['bucket_id']
+        drop_event = submissions['drop_event']
+        item_id = drop_event['item_id']
+        bucket_id = drop_event['bucket_id']
 
         xmltree = etree.fromstring(self.data)
         items = self._get_items(xmltree)
+        correct_feedback = self._get_correct_feedback(xmltree)
 
         is_correct = False
+        is_completed = False
         msg = None
+
+        max_items_to_be_correct = 0
         for item in items:
+            # let's count the number of items that have a correct target (aka not a decoy)
+            if item.correct_target:
+                max_items_to_be_correct += 1
+
             if item.id == item_id:
+                # did the user place it in the right bucket?
                 if item.correct_target == bucket_id:
+                    # store the state that the user placed the item in the right bucket
+                    # note we don't store incorrect placements, becuase the UI will snap
+                    # it back to the item list dock
+                    self.item_state[item_id] = bucket_id
                     is_correct = True
+
                     msg = item.correct_feedback
                 else:
                     msg = item.incorrect_feedback
 
+        # let's calculate if the user has placed all items in the correct bucket
+        # but only if the current action was correct (e.g. don't give completed feedback)
+        # if use contrinues to drop decoys
+        if is_correct and len(self.item_state) == max_items_to_be_correct:
+            is_completed = True
+            if correct_feedback:
+                msg = correct_feedback
+
         if is_correct:
             return {
                 'result': 'success',
-                'msg': msg
+                'msg': msg,
+                'is_completed': is_completed,
             }
         else:
             return {
                 'result': 'failure',
-                'msg': msg
+                'msg': msg,
             }
 
 
@@ -239,7 +276,7 @@ class DragAndDropBlock(XBlock):
         Parse the XML to get the feedback presented when the student
         answers everything correctly
         """
-        self._inner_content(xmltree.find('correct_feedback'))
+        return self._inner_content(xmltree.find('correct_feedback'))
 
     def _get_targets(self, xmltree):
         """

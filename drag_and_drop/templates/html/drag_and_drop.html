@@ -15,13 +15,15 @@
         </div>
         <div class="drag-and-drop-targets-pane">
             {% for target in targets %}
-                <div class="draggable-target" data-id="{{target.id}}" data-row="{{target.row}}">
+                <div class="{{draggable_target_class}}" data-id="{{target.id}}" data-row="{{target.row}}">
                     <div class="draggable-target-top">
-                        <div class="draggable-target-title">
-                            {{target.title}}
-                        </div>
-                        <div class="draggable-target-description">
-                            {{target.description}}
+                        <div class="draggable-target-top-text">
+                            <span class="draggable-target-title">
+                                {{target.title}}
+                            </span>
+                            <span class="draggable-target-description">
+                                {{target.description}}
+                            </span>
                         </div>
                     </div>
                     <div class="draggable-target-landing">

@@ -11,23 +11,47 @@
   user-select:none;
 }
 
+.drag-and-drop-description p {
+    padding-bottom: 10px;
+}
+
 .drag-and-drop-wrapper {
     width: 750px;
     margin: 0 auto;
+    background-color: #F3F3F3;
+    overflow: auto;
 }
+
 .drag-and-drop-items-pane {
     width: 30%;
     float: left;
     padding-right: 20px;
 }
+
+.drag-and-drop-wrapper li p {
+    font-family: "Open Sans";
+    font-size: 14pt;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-top: 5px;
+    color: #FFFFFF;
+}
+
 .draggable-item {
     padding-bottom: 5px;
-    background-color: blue;
+    background-color: #3384CA;
     list-style-type: none;
     z-index: 9999999;
     /* note, this is a hack to get to work in Firefox otherwise the redraw looks really funky */
     outline: 1px solid transparent;
+    height: 45px;
+    width: 210px;
 }
+
+.draggable-item.draggable-item-original {
+    background-color: #B1C2CC;
+}
+
 
 .drag-and-drop-targets-pane {
     width: 70%;
@@ -37,50 +61,48 @@
 .draggable-target {
     width: 50%;
     float: left;
-    background-color: orange;
     padding-right: 10px;
     padding-bottom: 10px;
 }
 
+.draggable-target-full-width {
+    width: 100%;
+    float: left;
+    padding-right: 0;
+    padding-bottom: 0;
+}
+
 .draggable-target-top {
     width: 100%;
+    background-color: #002960;
+}
+
+.draggable-target-top-text {
+    padding-left: 5px;
 }
 
 .draggable-target-title {
-    width: 30%;
-    float: left;
-    background-color: red;
-    padding-right: 5px;
-    min-height: 75px;
+    color: #FFFFFF;
+    font-family: "Open Sans";
+    font-weight: bold;
 }
 
 .draggable-target-description {
-    width: 70%;
-    float: left;
-    min-height: 75px;
+    color: #FFFFFF;
+    font-family: "Open Sans";
 }
 
 .draggable-target-landing {
     display: inline-block;
     width: 100%;
     min-height: 150px;
-    background-color: yellow;
+    background-color: #E5EBEE;
+    vertical-align: bottom;
 }
 
 .draggable-target-landing-hover {
-    background-color: pink;
+    background-color: #FFFFFF;
 }
-
-.draggable-target-title p {
-    margin-top: 2px;
-    margin-left: 3px;
-}
-
-.draggable-target-description p {
-    margin-top: 2px;
-    margin-left: 3px;
-}
-
 
 .draggable-target-landing .dropped-items {
     padding-left: 0;
@@ -91,9 +113,11 @@
 }
 
 .dropped-correct-item {
-    padding-bottom: 5px;
-    background-color: cyan;
+    background-color: #E37222;
     list-style-type: none;
+    height: 45px;
+    width: 210px;
+    padding-bottom: 5px;
 }
 
 
@@ -102,8 +126,8 @@
     top: 20%;
     left: 30%;
     min-height: 200px;
-    width: 400px;
-    background-color: rgba(0, 101, 189, 0.80);
+    width: 500px;
+    background-color: rgba(0, 101, 189, 0.90);
     display: none;
 }
 
