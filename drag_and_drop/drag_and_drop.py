@@ -64,22 +64,22 @@ class DragAndDropBlock(XBlock):
                 <targets>
                     <bucket id='task1' title='Task 1'>
                         <description>
-                            <p>This is target 1. Choose me!</p>
+                            <span>This is target 1. Choose me!</span>
                         </description>
                     </bucket>
                     <bucket id='task2' title='Task 2'>
                         <description>
-                            <p>This is target 2. Pick me!</p>
+                            <span>This is target 2. Pick me!</span>
                         </description>
                     </bucket>
                     <bucket id='task3' title='Task 3'>
                         <description>
-                            <p>This is target 3. Here I am!</p>
+                            <span>This is target 3. Here I am!</span>
                         </description>
                     </bucket>
                     <bucket id='task4' title='Task 4'>
                         <description>
-                            <p>This is target 4. Look here!</p>
+                            <span>This is target 4. Look here!</span>
                         </description>
                     </bucket>
                 </targets>
