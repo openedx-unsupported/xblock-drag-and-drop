@@ -31,6 +31,13 @@
     padding-right: 20px;
 }
 
+.drag-and-drop-items-pane > ul.draggable-item-list {
+    margin-top: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-left: 0 !important;
+}
+
 .drag-and-drop-wrapper li p {
     font-family: "Open Sans";
     font-size: 14pt;
@@ -57,7 +64,7 @@
 
 
 .drag-and-drop-targets-pane {
-    width: 70%;
+    width: 69%;
     float: left;
 }
 
@@ -91,7 +98,7 @@
     font-weight: bold;
 }
 
-.draggable-target-description {
+.draggable-target-description *{
     color: #FFFFFF;
     font-family: "Open Sans";
 }
@@ -111,7 +118,7 @@
 }
 
 .draggable-target-landing .dropped-items {
-    padding-left: 0;
+    padding-left: 0 !important;
     margin-left: 10px;
     margin-top: 15px;
     margin-bottom: 15px;

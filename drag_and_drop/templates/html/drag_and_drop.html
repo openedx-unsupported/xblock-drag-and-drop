@@ -7,7 +7,7 @@
     </div>
     <div class="drag-and-drop-wrapper">
         <div class="drag-and-drop-items-pane">
-            <ul clas="draggable-item-list">
+            <ul class="draggable-item-list">
                 {% for item in items %}
                 <li class="draggable-item" data-id="{{item.id}}" data-correctbucket="{{item.correct_target}}">{{item.body}}</li>
                 {% endfor %}
