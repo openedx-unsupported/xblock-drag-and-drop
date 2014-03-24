@@ -11,6 +11,13 @@
       </li>
       <li class="field comp-setting-entry is-set">
           <div class="wrapper-comp-setting">
+            <label class="label setting-label" for="edit_max_score">Max Score</label>
+            <input class="input setting-input edit-max-score" id="edit_max_score" value="{{ self.max_score }}" type="text">
+          </div>
+          <span class="tip setting-help">The maximum number of points awarded to this problem</span>
+      </li>
+      <li class="field comp-setting-entry is-set">
+          <div class="wrapper-comp-setting">
             <label class="label setting-label" for="edit_data">Definition</label>
             <span class="tip setting-help">The XML definition for the Drag and Drop</span>
             <div class='codemirror-editor-wrapper'>

@@ -135,13 +135,17 @@ class DragAndDropBlock(XBlock):
 
         draggable_target_class = 'draggable-target' if len(targets) > 1 else 'draggable-target-full-width'
 
+        max_score_string = '({0} Point{1})'.format(self.max_score,
+            's' if self.max_score > 1 else '') if self.max_score else ''
+
         context = {
             'title': self.display_name,
             'description': description,
             'items': items,
             'targets': targets,
             'correct_feedback': correct_feedback,
-            'draggable_target_class': draggable_target_class
+            'draggable_target_class': draggable_target_class,
+            'max_score_string': max_score_string
         }
 
 
@@ -174,6 +178,19 @@ class DragAndDropBlock(XBlock):
 
         self.display_name = submissions['display_name']
         xml_content = submissions['data']
+        max_score = submissions['max_score']
+
+        if not max_score:
+            # empty = default
+            max_score = 1
+        else:
+            try:
+                # not an integer, then default
+                max_score = int(max_score)
+            except:
+                max_score = 1
+
+        self.max_score = max_score
 
         try:
             etree.parse(StringIO(xml_content))
@@ -237,6 +254,19 @@ class DragAndDropBlock(XBlock):
             is_completed = True
             if correct_feedback:
                 msg = correct_feedback
+
+            # publish a grading event when student completes this exercise
+            # NOTE, we don't support partial credit
+            try:
+                self.runtime.publish(self, {
+                    'event_type': 'grade',
+                    'value': self.max_score,
+                    'max_value': self.max_score,
+                })
+            except NotImplementedError:
+                # Note, this publish method is unimplemented in Studio runtimes, so
+                # we have to figure that we're running in Studio for now
+                pass
 
         if is_correct:
             return {

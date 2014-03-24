@@ -24,7 +24,7 @@ function DragAndDropBlock(runtime, element) {
 
         // now make sure the row has all the same size as the size of the
         // drop landing area can grow as we add new elements
-        var new_height = bucket_landing.height();
+        var new_height = bucket_landing.outerHeight();
         var bucket_row = bucket.data('row');
         $('.draggable-target',element).each(function(index, el) {
             var ele = $(el);

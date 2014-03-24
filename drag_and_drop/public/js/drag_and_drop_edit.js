@@ -5,6 +5,7 @@ function DragAndDropEditBlock(runtime, element) {
     $(element).find('.save-button').bind('click', function() {
         var data = {
             'display_name': $(element).find('.edit-display-name').val(),
+            'max_score': $('.edit-max-score', element).val(),
             'data': xmlEditor.getValue(),
         };
 
