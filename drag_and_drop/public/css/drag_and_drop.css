@@ -73,6 +73,7 @@
 .drag-and-drop-targets-pane {
     width: 69%;
     float: left;
+    overflow-x:hidden;
 }
 
 .draggable-target {
