@@ -64,12 +64,12 @@ class DragAndDropBlock(XBlock):
                 <targets>
                     <bucket id='task1' title='Task 1'>
                         <description>
-                            <span>This is target 1. Choose me!</span>
+                            <span>This is target 1.</span>
                         </description>
                     </bucket>
                     <bucket id='task2' title='Task 2'>
                         <description>
-                            <span>This is target 2. Pick me!</span>
+                            <span>This is target 2.  Choose me!</span>
                         </description>
                     </bucket>
                     <bucket id='task3' title='Task 3'>
@@ -112,6 +112,17 @@ class DragAndDropBlock(XBlock):
                         </body>
                         <incorrect_feedback>
                             <p>This is just a decoy, silly person!</p>
+                        </incorrect_feedback>
+                    </item>
+                    <item id='item4' correct_target='task3'>
+                        <body>
+                            <img src="//www.utexas.edu/law/sao/img/sunflower_small.png" />
+                        </body>
+                        <correct_feedback>
+                            <p>Yes, sunflowers do like it here.</p>
+                        </correct_feedback>
+                        <incorrect_feedback>
+                            <p>That is not where the sunflower belongs</p>
                         </incorrect_feedback>
                     </item>
                 </items>
@@ -348,6 +359,7 @@ class DragAndDropBlock(XBlock):
         for item_element in item_elements:
             item_id = item_element.get('id')
             correct_target = item_element.get('correct_target')  # note, this can be None
+            no_bg_color = item_element.get('no_bg_color', False)
 
             body = self._inner_content(item_element.find('body'))
 
@@ -366,6 +378,7 @@ class DragAndDropBlock(XBlock):
             item.body = body
             item.correct_feedback = correct_feedback
             item.incorrect_feedback = incorrect_feedback
+            item.no_bg_color = no_bg_color
 
             items.append(item)
 

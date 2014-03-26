@@ -12,7 +12,14 @@ function DragAndDropBlock(runtime, element) {
 
         // copy over the dragged item into a new DOM element
         var copy = item.clone();
-        copy.attr('class', 'dropped-correct-item');
+
+        // If the dragged item has no-bg-color associated with it, be sure
+        // to make sure that the dropped item also has that characteristic
+        if (copy.hasClass('draggable-item-no-bg-color')) {
+            copy.attr('class', 'dropped-correct-item dropped-correct-item-no-bg-color');
+        } else {
+            copy.attr('class', 'dropped-correct-item');
+        }
         copy.removeAttr('style');
 
         // delete the original one(s)
@@ -28,7 +35,7 @@ function DragAndDropBlock(runtime, element) {
         var bucket_row = bucket.data('row');
         $('.draggable-target',element).each(function(index, el) {
             var ele = $(el);
-            if (ele.data('row') === bucket_row) {
+            if (ele.data('row') === bucket_row && ele.data('id') !== item_id) {
                 var ele_landing = ele.find('.draggable-target-landing');
                 ele_landing.css('min-height', new_height);
             }
@@ -38,7 +45,12 @@ function DragAndDropBlock(runtime, element) {
     // set up the draggable items
     $('.draggable-item', element).draggable({
         revert: function(evt, ui) {
-            return !evt;
+            if (!evt) {
+                $('.draggable-item').removeClass("draggable-item-original");
+                return true;
+            } else {
+                return false;
+            }
         },
         start: function(evt, ui) {
             $(ui.helper.context).addClass("draggable-item-original");

@@ -9,7 +9,7 @@
         <div class="drag-and-drop-items-pane">
             <ul class="draggable-item-list">
                 {% for item in items %}
-                <li class="draggable-item" data-id="{{item.id}}" data-correctbucket="{{item.correct_target}}">{{item.body}}</li>
+                <li class="draggable-item{% if item.no_bg_color %} draggable-item-no-bg-color{% endif %}" data-id="{{item.id}}" data-correctbucket="{{item.correct_target}}">{{item.body}}</li>
                 {% endfor %}
             </ul>
             &nbsp;

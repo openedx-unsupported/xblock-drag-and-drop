@@ -54,14 +54,21 @@
     z-index: 9999999;
     /* note, this is a hack to get to work in Firefox otherwise the redraw looks really funky */
     outline: 1px solid transparent;
-    height: 45px;
+    min-height: 45px;
     width: 210px;
+}
+
+.draggable-item > img {
+    width: 100%;
+}
+
+.draggable-item.draggable-item-no-bg-color {
+    background-color: transparent;
 }
 
 .draggable-item.draggable-item-original {
     background-color: #B1C2CC;
 }
-
 
 .drag-and-drop-targets-pane {
     width: 69%;
@@ -128,11 +135,18 @@
 .dropped-correct-item {
     background-color: #E37222;
     list-style-type: none;
-    height: 45px;
+    min-height: 45px;
     width: 210px;
     padding-bottom: 5px;
 }
 
+.dropped-correct-item > img {
+    width: 100%;
+}
+
+.dropped-correct-item.dropped-correct-item-no-bg-color {
+    background-color: transparent;
+}
 
 .drag-and-drop-feedback {
     position: absolute;
