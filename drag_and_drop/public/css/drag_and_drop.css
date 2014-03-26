@@ -19,7 +19,7 @@
     width: 750px;
     margin: 0 auto;
     background-color: #F3F3F3;
-    overflow: auto;
+    overflow: hidden;
     padding-top: 10px;
     padding-left: 10px;
     position: relative;
@@ -73,7 +73,6 @@
 .drag-and-drop-targets-pane {
     width: 69%;
     float: left;
-    overflow-x:hidden;
 }
 
 .draggable-target {
