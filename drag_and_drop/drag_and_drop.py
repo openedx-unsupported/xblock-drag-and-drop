@@ -125,6 +125,17 @@ class DragAndDropBlock(XBlock):
                             <p>That is not where the sunflower belongs</p>
                         </incorrect_feedback>
                     </item>
+                    <item id='item5' correct_target='task4' no_bg_color='true'>
+                        <body>
+                            <img src="//3.bp.blogspot.com/-zVV6yHfER04/UgPkN44z-yI/AAAAAAAABto/NAsyEHx3mFU/s1600/0209-NL-1992161-20130808.jpg" />
+                        </body>
+                        <correct_feedback>
+                            <p>Correct, tulips do like to grow in Holland near a windmill</p>
+                        </correct_feedback>
+                        <incorrect_feedback>
+                            <p>Not quite the right answer. Try again!</p>
+                        </incorrect_feedback>
+                    </item>
                 </items>
 
             </drag_and_drop>
@@ -269,8 +280,7 @@ class DragAndDropBlock(XBlock):
             # publish a grading event when student completes this exercise
             # NOTE, we don't support partial credit
             try:
-                self.runtime.publish(self, {
-                    'event_type': 'grade',
+                self.runtime.publish(self, 'grade', {
                     'value': self.max_score,
                     'max_value': self.max_score,
                 })
