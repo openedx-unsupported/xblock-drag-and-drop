@@ -142,6 +142,8 @@ class DragAndDropBlock(XBlock):
         """
         ))
 
+    has_score = True
+
     def student_view(self, context):
         """
         Player view, displayed to the student
