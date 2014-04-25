@@ -11,7 +11,7 @@ from lxml import etree
 from xml.etree import ElementTree as ET
 
 from xblock.core import XBlock
-from xblock.fields import Scope, String, Integer, Dict
+from xblock.fields import Scope, String, Dict, Float
 from xblock.fragment import Fragment
 
 from StringIO import StringIO
@@ -37,9 +37,9 @@ class DragAndDropBlock(XBlock):
         default="Drag and Drop"
     )
 
-    max_score = Integer(
-        display_name="Max Score",
-        help="This is the score that the user receives when he/she successfully completes the problem",
+    weight = Float(
+        display_name="Weight",
+        help="This is the maximum score that the user receives when he/she successfully completes the problem",
         scope=Scope.settings,
         default=1
     )
@@ -159,8 +159,8 @@ class DragAndDropBlock(XBlock):
 
         draggable_target_class = 'draggable-target' if len(targets) > 1 else 'draggable-target-full-width'
 
-        max_score_string = '({0} Point{1})'.format(self.max_score,
-            's' if self.max_score > 1 else '') if self.max_score else ''
+        max_score_string = '({0} Point{1})'.format(int(self.weight),
+            's' if self.weight > 1 else '') if self.weight else ''
 
         context = {
             'title': self.display_name,
@@ -214,7 +214,7 @@ class DragAndDropBlock(XBlock):
             except:
                 max_score = 1
 
-        self.max_score = max_score
+        self.weight = max_score
 
         try:
             etree.parse(StringIO(xml_content))
@@ -283,8 +283,8 @@ class DragAndDropBlock(XBlock):
             # NOTE, we don't support partial credit
             try:
                 self.runtime.publish(self, 'grade', {
-                    'value': self.max_score,
-                    'max_value': self.max_score,
+                    'value': self.weight,
+                    'max_value': self.weight,
                 })
             except NotImplementedError:
                 # Note, this publish method is unimplemented in Studio runtimes, so
