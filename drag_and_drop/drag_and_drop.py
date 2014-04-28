@@ -153,7 +153,6 @@ class DragAndDropBlock(XBlock):
 
         # parse out all of the XML into nice friendly objects
         description = self._get_description(xmltree)
-        correct_feedback = self._get_correct_feedback(xmltree)
         items = self._get_items(xmltree)
         targets = self._get_targets(xmltree)
 
@@ -167,11 +166,21 @@ class DragAndDropBlock(XBlock):
             'description': description,
             'items': items,
             'targets': targets,
-            'correct_feedback': correct_feedback,
             'draggable_target_class': draggable_target_class,
-            'max_score_string': max_score_string
+            'max_score_string': max_score_string,
+            'correct_feedback_class': 'drag-and-drop-completed-feedback',
         }
 
+        max_items_to_be_correct = 0
+        for item in items:
+            # let's count the number of items that have a correct target (aka not a decoy)
+            if item.correct_target:
+                max_items_to_be_correct += 1
+
+        # if student has completed this exercise then show the correct feedback
+        if len(self.item_state) == max_items_to_be_correct:
+            context['correct_feedback'] = self._get_correct_feedback(xmltree)
+            context['correct_feedback_class'] = 'drag-and-drop-completed-feedback-visible'
 
         fragment = Fragment()
         fragment.add_content(render_template('/templates/html/drag_and_drop.html', context))
@@ -274,10 +283,11 @@ class DragAndDropBlock(XBlock):
         # let's calculate if the user has placed all items in the correct bucket
         # but only if the current action was correct (e.g. don't give completed feedback)
         # if use contrinues to drop decoys
+        completed_feedback = None
         if is_correct and len(self.item_state) == max_items_to_be_correct:
             is_completed = True
             if correct_feedback:
-                msg = correct_feedback
+                completed_feedback = correct_feedback
 
             # publish a grading event when student completes this exercise
             # NOTE, we don't support partial credit
@@ -296,6 +306,7 @@ class DragAndDropBlock(XBlock):
                 'result': 'success',
                 'msg': msg,
                 'is_completed': is_completed,
+                'completed_feedback': completed_feedback,
             }
         else:
             return {

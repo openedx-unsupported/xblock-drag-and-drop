@@ -97,39 +97,18 @@ function DragAndDropBlock(runtime, element) {
 
                     draggable.data('id', '');
                     move_item_to_bucket(item_id, bucket_id);
-                    /*
-                    // user put the item in the right bucket
-                    var draggable_list = draggable.parent('.draggable-item-list');
-
-                    // copy over the dragged item into a new DOM element
-                    var copy = draggable.clone();
-                    copy.attr('class', 'dropped-correct-item');
-                    copy.removeAttr('style');
-
-                    // delete the original one
-                    draggable.remove();
-
-                    var dropped_list = target.find('.dropped-items');
-
-                    dropped_list.append(copy);
-
-                    // now make sure the row has all the same size as the size of the
-                    // drop landing area can grow as we add new elements
-                    var new_height = target.height();
-                    var bucket_row = bucket.data('row');
-                    $('.draggable-target',element).each(function(index, el) {
-                        var ele = $(el);
-                        if (ele.data('row') === bucket_row) {
-                            var ele_landing = ele.find('.draggable-target-landing');
-                            ele_landing.height(new_height);
-                        }
-                    });*/
                 }
 
                 // show feedback
                 if (response.msg !== undefined && response.msg !== null) {
                     $('.drag-and-drop-feedback-content', element).html(response.msg);
                     $('.drag-and-drop-feedback', element).css('display', 'block');
+                }
+
+                // show completed feedback, if present
+                if (response.completed_feedback !== undefined && response.completed_feedback !== null) {
+                    $('.drag-and-drop-completed-feedback-content', element).html(response.completed_feedback);
+                    $('.drag-and-drop-completed-feedback', element).removeClass('drag-and-drop-completed-feedback').addClass('drag-and-drop-completed-feedback-visible');
                 }
             });
 

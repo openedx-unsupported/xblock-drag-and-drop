@@ -171,3 +171,11 @@
     margin-left: 20px;
     color: #FFFFFF;
 }
+
+.drag-and-drop-completed-feedback-visible {
+    display: block;
+}
+
+.drag-and-drop-completed-feedback {
+    display: none;
+}
