@@ -18,7 +18,7 @@
 .drag-and-drop-wrapper {
     width: 750px;
     margin: 0 auto;
-    background-color: #F3F3F3;
+    background-color: #EBF0F2;
     overflow: hidden;
     padding-top: 10px;
     padding-left: 10px;
@@ -40,7 +40,7 @@
 
 .drag-and-drop-wrapper li p {
     font-family: "Open Sans";
-    font-size: 14pt;
+    font-size: 12pt;
     font-weight: bold;
     padding-left: 10px;
     padding-top: 7px;
@@ -67,7 +67,7 @@
 }
 
 .draggable-item.draggable-item-original {
-    background-color: #B1C2CC;
+    background-color: #E0E0E0;
 }
 
 .drag-and-drop-targets-pane {
@@ -91,33 +91,37 @@
 
 .draggable-target-top {
     width: 100%;
-    background-color: #002960;
+    background-color: #B1C2CC;
 }
 
 .draggable-target-top-text {
-    padding-left: 5px;
+    padding-left: 8px;
     padding-bottom: 5px;
+    padding-top: 3px;
 }
 
 .draggable-target-title {
-    color: #FFFFFF;
+    color: #333333;
     font-family: "Open Sans";
     font-weight: bold;
+    font-size: 12pt;
 }
 
 .draggable-target-description *{
-    color: #FFFFFF;
+    color: #333333;
     font-family: "Open Sans";
+    font-size: 12pt;
 }
 
 .draggable-target-landing {
     display: inline-block;
     width: 100%;
     min-height: 150px;
-    background-color: #E5EBEE;
+    background-color: #FFFFFF;
     vertical-align: bottom;
     border-style: dashed;
     border-width: 1px;
+    border-color: #B1C2CC;
 }
 
 .draggable-target-landing-hover {
@@ -133,7 +137,7 @@
 }
 
 .dropped-correct-item {
-    background-color: #E37222;
+    background-color: #868685;
     list-style-type: none;
     min-height: 45px;
     width: 210px;
@@ -154,28 +158,32 @@
     left: 32%;
     min-height: 350px;
     width: 500px;
-    background-color: rgba(0, 101, 189, 0.90);
+    background-color: rgba(102, 165, 181, 0.90);
     display: none;
 }
 
 .drag-and-drop-feedback-content {
     color: #FFFFFF;
-    margin-left: 10px;
-    margin-top: 15px;
+    margin-left: 15px;
+    margin-top: 35px;
 }
 
 .drag-and-drop-feedback-close {
     float: right;
-    margin-right: 5px;
-    margin-top: 0px;
+    margin-right: 8px;
+    margin-top: 8px;
     margin-left: 20px;
     color: #FFFFFF;
+    font-family: "fontawesome";
+    font-size: 18pt;
 }
 
 .drag-and-drop-completed-feedback-visible {
     display: block;
+
 }
 
 .drag-and-drop-completed-feedback {
     display: none;
 }
+
