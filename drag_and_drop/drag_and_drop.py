@@ -158,7 +158,7 @@ class DragAndDropBlock(XBlock):
 
         draggable_target_class = 'draggable-target' if len(targets) > 1 else 'draggable-target-full-width'
 
-        max_score_string = '({0} Point{1})'.format(int(self.weight),
+        max_score_string = '({0} Point{1} Possible)'.format(int(self.weight),
             's' if self.weight > 1 else '') if self.weight else ''
 
         context = {
