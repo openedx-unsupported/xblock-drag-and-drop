@@ -154,18 +154,21 @@
 
 .drag-and-drop-feedback {
     position: absolute;
-    top: 10%;
+    top: 15%;
     left: 32%;
-    min-height: 350px;
+    min-height: 50px;
     width: 500px;
     background-color: rgba(102, 165, 181, 0.90);
     display: none;
+    overflow-y: auto;
+    max-height: 80%;
 }
 
 .drag-and-drop-feedback-content {
     color: #FFFFFF;
     margin-left: 15px;
     margin-top: 35px;
+    margin-bottom: 15px;
 }
 
 .drag-and-drop-feedback-close {
