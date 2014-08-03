@@ -64,6 +64,9 @@ function DragAndDropBlock(runtime, element) {
             $(ui.helper.context).addClass("draggable-item-original");
             // on drag start hide any feedback that might be open
             $('.drag-and-drop-feedback', element).css('display', 'none');
+
+            var item_id = $(evt.target).data("id");
+            publish_event({event_type:'drag-and-drop.item.picked-up', item_id:item_id});
         },
         drop: function(evt, ui) {
             $(ui.helper.context).removeClass("draggable-item-original");
