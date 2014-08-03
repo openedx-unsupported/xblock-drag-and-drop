@@ -1,4 +1,12 @@
 function DragAndDropBlock(runtime, element) {
+    function publish_event(data) {
+      $.ajax({
+          type: "POST",
+          url: runtime.handlerUrl(element, 'publish_event'),
+          data: JSON.stringify(data)
+      });
+    }
+
     var move_item_to_bucket = function(item_id, bucket_id) {
         // select the items with the matching item_id. Note there can be
         // more than one since we are using 'clone' draggables
@@ -161,6 +169,7 @@ function DragAndDropBlock(runtime, element) {
         eventObj.preventDefault();
         eventObj.stopPropagation();
         $('.drag-and-drop-feedback', element).css('display', 'none');
+        publish_event({event_type:'drag-and-drop.feedback.closed-manually'});
     });
 
     //
