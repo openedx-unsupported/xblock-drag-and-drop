@@ -305,6 +305,14 @@ class DragAndDropBlock(XBlock):
                 # we have to figure that we're running in Studio for now
                 pass
 
+        self.runtime.publish(self, 'drag-and-drop.item.dropped', {
+            'component_id': self.scope_ids.usage_id,
+            'user_id': self.runtime.user_id,
+            'item_id': item_id,
+            'location': bucket_id,
+            'is_correct': is_correct
+        })
+
         if is_correct:
             return {
                 'result': 'success',
