@@ -406,3 +406,8 @@ class DragAndDropBlock(XBlock):
             items.append(item)
 
         return items
+
+    @staticmethod
+    def workbench_scenarios():
+        """A canned scenario for display in the workbench."""
+        return [("Drag-and-drop scenario", "<vertical_demo><drag-and-drop/></vertical_demo>")]
