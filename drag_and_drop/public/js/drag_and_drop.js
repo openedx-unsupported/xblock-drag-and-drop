@@ -66,7 +66,7 @@ function DragAndDropBlock(runtime, element) {
             $('.drag-and-drop-feedback', element).css('display', 'none');
 
             var item_id = $(evt.target).data("id");
-            publish_event({event_type:'drag-and-drop.item.picked-up', item_id:item_id});
+            publish_event({event_type:'xblock.drag-and-drop.item.pickedup', item_id:item_id});
         },
         drop: function(evt, ui) {
             $(ui.helper.context).removeClass("draggable-item-original");
@@ -172,7 +172,7 @@ function DragAndDropBlock(runtime, element) {
         eventObj.preventDefault();
         eventObj.stopPropagation();
         $('.drag-and-drop-feedback', element).css('display', 'none');
-        publish_event({event_type:'drag-and-drop.feedback.closed-manually'});
+        publish_event({event_type:'xblock.drag-and-drop.feedback.closed-manually'});
     });
 
     //
@@ -185,4 +185,7 @@ function DragAndDropBlock(runtime, element) {
         }
     });
 
+    publish_event({
+        event_type:"xblock.drag-and-drop.loaded"
+    });
 }
