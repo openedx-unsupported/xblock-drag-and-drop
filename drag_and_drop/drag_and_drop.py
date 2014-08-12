@@ -192,6 +192,17 @@ class DragAndDropBlock(XBlock):
 
         return fragment
 
+    @XBlock.json_handler
+    def publish_event(self, data, suffix=''):
+
+        try:
+            event_type = data.pop('event_type')
+        except KeyError as e:
+            return {'result': 'error', 'message': 'Missing event_type in JSON data'}
+
+        self.runtime.publish(self, event_type, data)
+        return {'result':'success'}
+
     def studio_view(self, context):
         """
         Editing view in Studio
@@ -300,6 +311,12 @@ class DragAndDropBlock(XBlock):
                 # Note, this publish method is unimplemented in Studio runtimes, so
                 # we have to figure that we're running in Studio for now
                 pass
+
+        self.runtime.publish(self, 'drag-and-drop.item.dropped', {
+            'item_id': item_id,
+            'location': bucket_id,
+            'is_correct': is_correct
+        })
 
         if is_correct:
             return {

@@ -1,4 +1,29 @@
 function DragAndDropBlock(runtime, element) {
+    function publish_event(data) {
+      $.ajax({
+          type: "POST",
+          url: runtime.handlerUrl(element, 'publish_event'),
+          data: JSON.stringify(data)
+      });
+    }
+
+    function close_feedbacks(element, method) {
+        var is_manual = false;
+        if (method === "manual") {
+            is_manual = true;
+        };
+
+        var feedbacks = $('.drag-and-drop-feedback', element);
+        feedbacks.css('display', 'none');
+        feedbacks.each(function(i, feedback){
+            publish_event({
+                event_type:'xblock.drag-and-drop.feedback.closed',
+                content: $('.drag-and-drop-feedback-content', feedback).html(),
+                manual: is_manual
+            });
+        });
+    }
+
     var move_item_to_bucket = function(item_id, bucket_id) {
         // select the items with the matching item_id. Note there can be
         // more than one since we are using 'clone' draggables
@@ -55,7 +80,10 @@ function DragAndDropBlock(runtime, element) {
         start: function(evt, ui) {
             $(ui.helper.context).addClass("draggable-item-original");
             // on drag start hide any feedback that might be open
-            $('.drag-and-drop-feedback', element).css('display', 'none');
+            close_feedbacks(element, "automatic");
+
+            var item_id = $(evt.target).data("id");
+            publish_event({event_type:'xblock.drag-and-drop.item.picked-up', item_id:item_id});
         },
         drop: function(evt, ui) {
             $(ui.helper.context).removeClass("draggable-item-original");
@@ -103,6 +131,7 @@ function DragAndDropBlock(runtime, element) {
                 if (response.msg !== undefined && response.msg !== null) {
                     $('.drag-and-drop-feedback-content', element).html(response.msg);
                     $('.drag-and-drop-feedback', element).css('display', 'block');
+                    publish_event({event_type:'xblock.drag-and-drop.feedback.opened', content: response.msg});
                 }
 
                 // show completed feedback, if present
@@ -160,7 +189,7 @@ function DragAndDropBlock(runtime, element) {
     $('.drag-and-drop-feedback-close', element).click(function(eventObj) {
         eventObj.preventDefault();
         eventObj.stopPropagation();
-        $('.drag-and-drop-feedback', element).css('display', 'none');
+        close_feedbacks(element, "manual");
     });
 
     //
@@ -173,4 +202,5 @@ function DragAndDropBlock(runtime, element) {
         }
     });
 
+    publish_event({event_type:"xblock.drag-and-drop.loaded"});
 }
