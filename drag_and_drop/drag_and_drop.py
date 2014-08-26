@@ -201,9 +201,18 @@ class DragAndDropBlock(XBlock):
             return {'result': 'error', 'message': 'Missing event_type in JSON data'}
 
         data['user_id'] = self.scope_ids.user_id
+        data['component_id'] = self._get_unique_id()
 
         self.runtime.publish(self, event_type, data)
         return {'result':'success'}
+
+    def _get_unique_id(self):
+        try:
+            unique_id = self.location.name
+        except AttributeError:
+            # workaround for xblock workbench
+            unique_id = self.parent.replace('.',  '-')
+        return unique_id
 
     def studio_view(self, context):
         """
@@ -316,6 +325,7 @@ class DragAndDropBlock(XBlock):
 
         self.runtime.publish(self, 'drag-and-drop.item.dropped', {
             'user_id': self.scope_ids.user_id,
+            'component_id': self._get_unique_id(),
             'item_id': item_id,
             'location': bucket_id,
             'is_correct': is_correct,
