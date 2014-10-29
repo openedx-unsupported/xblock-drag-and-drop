@@ -323,6 +323,8 @@ class DragAndDropBlock(XBlock):
                 # we have to figure that we're running in Studio for now
                 pass
 
+        self.runtime.publish(self, 'progress', {})
+
         self.runtime.publish(self, 'drag-and-drop.item.dropped', {
             'user_id': self.scope_ids.user_id,
             'component_id': self._get_unique_id(),
