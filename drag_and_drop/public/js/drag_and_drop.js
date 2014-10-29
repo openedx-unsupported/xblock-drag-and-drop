@@ -196,7 +196,7 @@ function DragAndDropBlock(runtime, element) {
     // on page load get the state of the items and put them in the buckets if they have been
     // properly set
     //
-    $.ajax(runtime.handlerUrl(element, 'get_item_state')).done(function(data){
+    $.ajax(runtime.handlerUrl(element, 'get_item_state'), { dataType: 'json' }).done(function(data){
         for (var item_id in data) {
             move_item_to_bucket(item_id, data[item_id]);
         }
