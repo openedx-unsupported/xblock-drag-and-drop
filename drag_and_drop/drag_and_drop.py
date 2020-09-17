@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 #
 
 # Imports ###########################################################
 
-from __future__ import absolute_import
 import logging
 import textwrap
 import json
@@ -159,7 +157,7 @@ class DragAndDropBlock(XBlock):
 
         draggable_target_class = 'draggable-target' if len(targets) > 1 else 'draggable-target-full-width'
 
-        max_score_string = '({0} Point{1} Possible)'.format(int(self.weight),
+        max_score_string = '({} Point{} Possible)'.format(int(self.weight),
             's' if self.weight > 1 else '') if self.weight else ''
 
         context = {
@@ -355,7 +353,7 @@ class DragAndDropBlock(XBlock):
         """
         inner_content = None
         if tag is not None:
-            inner_content = u''.join(ET.tostring(e) for e in tag)
+            inner_content = ''.join(ET.tostring(e) for e in tag)
 
         return inner_content
 
