@@ -3,10 +3,12 @@
 
 # Imports ###########################################################
 
+from __future__ import absolute_import
 import logging
 import pkg_resources
 
 from django.template import Context, Template
+import six
 
 
 # Globals ###########################################################
@@ -21,7 +23,7 @@ def load_resource(resource_path):
     Gets the content of a resource
     """
     resource_content = pkg_resources.resource_string(__name__, resource_path)
-    return unicode(resource_content)
+    return six.text_type(resource_content)
 
 def render_template(template_path, context={}):
     """

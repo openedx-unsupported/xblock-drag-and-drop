@@ -3,6 +3,7 @@
 
 # Imports ###########################################################
 
+from __future__ import absolute_import
 import logging
 import textwrap
 import json
@@ -14,7 +15,7 @@ from xblock.core import XBlock
 from xblock.fields import Scope, String, Dict, Float
 from xblock.fragment import Fragment
 
-from StringIO import StringIO
+from io import StringIO
 
 from .utils import render_template, AttrDict, load_resource
 
