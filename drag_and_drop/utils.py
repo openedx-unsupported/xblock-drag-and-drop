@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 
 # Imports ###########################################################
@@ -21,7 +20,7 @@ def load_resource(resource_path):
     Gets the content of a resource
     """
     resource_content = pkg_resources.resource_string(__name__, resource_path)
-    return unicode(resource_content)
+    return str(resource_content)
 
 def render_template(template_path, context={}):
     """
@@ -33,6 +32,6 @@ def render_template(template_path, context={}):
 
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
-        super(AttrDict, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__dict__ = self
 
