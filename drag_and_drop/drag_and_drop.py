@@ -2,21 +2,20 @@
 
 # Imports ###########################################################
 
+import json
 import logging
 import textwrap
-import json
-import webob
-from lxml import etree
+from io import StringIO
 from xml.etree import ElementTree as ET
 
+from lxml import etree
+
+import webob
+from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Scope, String, Dict, Float
-from xblock.fragment import Fragment
+from xblock.fields import Dict, Float, Scope, String
 
-from io import StringIO
-
-from .utils import render_template, AttrDict, load_resource
-
+from .utils import AttrDict, load_resource, render_template
 
 # Globals ###########################################################
 
@@ -353,7 +352,7 @@ class DragAndDropBlock(XBlock):
         """
         inner_content = None
         if tag is not None:
-            inner_content = ''.join(ET.tostring(e) for e in tag)
+            inner_content = ''.join(ET.tostring(e).decode('utf-8') for e in tag)
 
         return inner_content
 

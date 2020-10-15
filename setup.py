@@ -21,7 +21,7 @@ def package_data(pkg, root_list):
 
 setup(
     name='xblock-drag-and-drop',
-    version='0.1',
+    version='1.0',
     description='XBlock - Drag-and-Drop',
     packages=['drag_and_drop'],
     install_requires=[
